@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منوی آبمیوه فروشی لوکس</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0b0b0b;
+            color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 15px;
+            max-width: 500px;
+            margin: auto;
+            min-height: 100vh;
+        }
+        .gold { color: #d4af37; }
+        .bg-gold { background: #d4af37; }
+        .border-gold { border-color: #d4af37; }
+        
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #d4af37; margin-bottom: 20px; }
+        .header h1 { font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; }
+        .header p { color: #aaa; margin-top: 5px; font-size: 1.1rem; }
+
+        .size-btn {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #161616; border: 1px solid #d4af37;
+            padding: 18px 20px; border-radius: 30px;
+            margin-bottom: 15px; cursor: pointer; transition: 0.3s;
+            color: #fff; font-size: 1.2rem; font-weight: bold;
+        }
+        .size-btn:hover { background: #222; transform: scale(1.02); border-color: #f1c40f; }
+        .size-btn .icon { font-size: 1.8rem; color: #d4af37; }
+
+        .info-row { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
+        .info-box { background: #161616; border-radius: 15px; padding: 15px; text-align: center; flex: 1; border: 1px solid #333; }
+        .info-box span { color: #d4af37; font-size: 1.5rem; display: block; margin-bottom: 5px; }
+        .info-box p { font-size: 0.8rem; color: #ccc; }
+
+        .inner-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 20px; }
+        .back-btn { background: none; border: none; color: #d4af37; font-size: 1.5rem; cursor: pointer; }
+        .cart-icon { color: #d4af37; font-size: 1.5rem; cursor: pointer; }
+
+        .category-title { text-align: center; font-size: 1.8rem; font-weight: bold; }
+        .category-slogan { text-align: center; color: #aaa; font-size: 0.9rem; margin: 5px 0 20px; font-style: italic; }
+
+        .menu-list { display: flex; flex-direction: column; gap: 15px; }
+        .menu-item {
+            display: flex; align-items: center; background: #161616;
+            border-radius: 20px; padding: 12px; border: 1px solid #333;
+        }
+        .item-img {
+            width: 70px; height: 70px; border-radius: 50%;
+            border: 2px solid #d4af37; display: flex; justify-content: center;
+            align-items: center; font-size: 2.5rem; margin-left: 15px;
+            background: #0b0b0b; flex-shrink: 0;
+        }
+        .item-info { flex: 1; }
+        .item-info h4 { font-size: 1.1rem; margin-bottom: 3px; color: #fff; }
+        .item-info p { font-size: 0.8rem; color: #888; }
+        .item-price { text-align: left; color: #d4af37; font-weight: bold; font-size: 1.1rem; }
+
+        .fat-burn-section { border: 1px solid #27ae60; background: #0d1f14; border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .fat-burn-section .category-title { color: #27ae60; }
+        .fat-burn-section .item-img { border-color: #27ae60; }
+    </style>
+</head>
+<body>
+
+    <div id="page-home" class="page active">
+        <div class="header">
+            <h1 class="gold">🍹 NATURE JUICE</h1>
+            <p>تازگی را بنوشید</p>
+        </div>
+        <div class="size-btn" onclick="openMenu('لیوانی')">
+            <span>منوی لیوانی</span>
+            <span class="icon">🥤</span>
+        </div>
+        <div class="size-btn" onclick="openMenu('نیم‌لیتری')">
+            <span>منوی نیم‌لیتری</span>
+            <span class="icon">🧃</span>
+        </div>
+        <div class="size-btn" onclick="openMenu('یک‌لیتری')">
+            <span>منوی یک‌لیتری</span>
+            <span class="icon">🍶</span>
+        </div>
+        <div class="size-btn" onclick="openMenu('یک‌ونیم‌لیتری')">
+            <span>منوی یک‌ونیم‌لیتری</span>
+            <span class="icon">🫙</span>
+        </div>
+
+        <div class="info-row">
+            <div class="info-box"><span>📍</span><p>آدرس ما</p></div>
+            <div class="info-box"><span>📞</span><p>تماس با ما</p></div>
+            <div class="info-box"><span>🕐</span><p>ساعت کاری<br>۹ تا ۲۳</p></div>
+        </div>
+    </div>
+
+    <div id="page-inner" class="page">
+        <div class="inner-header">
+            <button class="back-btn" onclick="closeMenu()">‹</button>
+            <span id="inner-title" class="category-title gold">عنوان منو</span>
+            <span class="cart-icon">🛒</span>
+        </div>
+        <p id="inner-slogan" class="category-slogan">شعار منو</p>
+
+        <div class="fat-burn-section">
+            <div class="category-title">🔥 چربی‌سوز (کرفس)</div>
+            <div id="fat-burn-list" class="menu-list" style="margin-top: 15px;"></div>
+        </div>
+
+        <div id="regular-list" class="menu-list"></div>
+    </div>
+
+    <script>
+        const menuData = {
+            fatBurners: [
+                { name: "میکس کرفس & سیب", desc: "کرفس + سیب سبز + لیمو", price: "_ تومان" },
+                { name: "میکس کرفس & آناناس", desc: "کرفس + آناناس + نعناع", price: "_ تومان" },
+                { name: "الیت کرفس", desc: "کرفس خالص + چند قطره آب لیمو", price: "_ تومان" }
+            ],
+            sizes: {
+                "لیوانی": {
+                    slogan: "از دل طبیعت تا لیوان شما",
+                    items: [
+                        { name: "آب پرتقال طبیعی", desc: "پرتقال نوبر", price: "_ تومان" },
+                        { name: "آب هویج", desc: "هویج تازه + سیب", price: "_ تومان" }
+                    ]
+                },
+                "نیم‌لیتری": {
+                    slogan: "لذت طعم واقعی میوه‌ها",
+                    items: [
+                        { name: "اسموتی توت‌فرنگی", desc: "توت‌فرنگی + ماست + عسل", price: "_ تومان" },
+                        { name: "آب هندوانه", desc: "هندوانه + نعناع", price: "_ تومان" }
+                    ]
+                },
+                "یک‌لیتری": {
+                    slogan: "کیفیتی که میتوان نوشی",
+                    items: [
+                        { name: "میکس استوایی", desc: "آناناس + انبه + پرتقال", price: "_ تومان" },
+                        { name: "میکس سبز", desc: "اسفناج + کرفس + سیب", price: "_ تومان" }
+                    ]
+                },
+                "یک‌ونیم‌لیتری": {
+                    slogan: "تازگی امضای ماست",
+                    items: [
+                        { name: "مگا میوه", desc: "انبه + طالبی + توت‌فرنگی", price: "_ تومان" },
+                        { name: "سلطان مرکبات", desc: "پرتقال + گریپ‌فروت + لیمو", price: "_ تومان" }
+                    ]
+                }
+            }
+        };
+
+        function renderItem(item) {
+            return `
+                <div class="menu-item">
+                    <div class="item-img">🍎</div>
+                    <div class="item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.desc}</p>
+                    </div>
+                    <div class="item-price">${item.price}</div>
+                </div>
+            `;
+        }
+
+        function openMenu(sizeKey) {
+            document.getElementById('page-home').classList.remove('active');
+            document.getElementById('page-inner').classList.add('active');
+
+            const sizeData = menuData.sizes[sizeKey];
+            document.getElementById('inner-title').textContent = `منوی ${sizeKey}`;
+            document.getElementById('inner-slogan').textContent = sizeData.slogan;
+
+            document.getElementById('fat-burn-list').innerHTML = menuData.fatBurners.map(renderItem).join('');
+            document.getElementById('regular-list').innerHTML = sizeData.items.map(renderItem).join('');
+        }
+
+        function closeMenu() {
+            document.getElementById('page-home').classList.add('active');
+            document.getElementById('page-inner').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
