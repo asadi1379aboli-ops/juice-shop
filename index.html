@@ -1,196 +1,46 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آبمیوه سلامت | منوی دیجیتال</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0b0b0b; color: #f5f5f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; max-width: 500px; margin: auto; min-height: 100vh; display: flex; flex-direction: column; }
-        .gold { color: #d4af37; }
-        .page { display: none; flex-direction: column; flex: 1; }
-        .page.active { display: flex; }
-
-        /* استایل صفحه ورود (لندینگ) */
-        #page-landing {
-            justify-content: center; align-items: center; text-align: center; height: 100vh;
-        }
-        .landing-logo {
-            width: 250px; height: 250px; border-radius: 50%; border: 4px solid #d4af37;
-            background-color: #fff; object-fit: cover; margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-        }
-        .landing-title { font-size: 2.5rem; margin-bottom: 10px; }
-        .landing-sub { color: #aaa; font-size: 1.1rem; margin-bottom: 40px; }
-        .enter-btn {
-            background: #d4af37; color: #000; border: none; padding: 15px 40px;
-            border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
-            transition: 0.3s; width: 80%;
-        }
-        .enter-btn:active { transform: scale(0.95); }
-
-        /* استایل صفحه اصلی منو */
-        #page-home { padding-top: 20px; }
-        .header-logo {
-            width: 100px; height: 100px; border-radius: 50%; border: 2px solid #d4af37;
-            background-color: #fff; object-fit: cover; margin: 0 auto 15px auto; display: block;
-        }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { font-size: 2rem; font-weight: bold; letter-spacing: 2px; }
-        .header p { color: #aaa; margin-top: 5px; font-size: 1rem; }
-
-        /* دکمه‌های انتخاب سایز */
-        .size-selector { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .size-btn {
-            flex: 1; min-width: 70px; background: #161616; border: 1px solid #333; color: #aaa;
-            padding: 10px 0; border-radius: 30px; cursor: pointer; transition: 0.3s;
-            text-align: center; font-weight: bold;
-        }
-        .size-btn.active { background: #d4af37; color: #000; border-color: #d4af37; }
-        .size-btn:active { transform: scale(0.95); }
-        .size-btn.hidden { display: none; }
-
-        .info-row { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
-        .info-box { background: #161616; border-radius: 15px; padding: 15px; text-align: center; flex: 1; border: 1px solid #333; }
-        .info-box span { color: #d4af37; font-size: 1.5rem; display: block; margin-bottom: 5px; }
-        .info-box p { font-size: 0.8rem; color: #ccc; }
-
-        .menu-list { display: flex; flex-direction: column; gap: 15px; padding-bottom: 50px; }
-        .menu-item { display: flex; align-items: center; background: #161616; border-radius: 20px; padding: 12px; border: 1px solid #333; }
-        .item-img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #d4af37; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; margin-left: 15px; background: #0b0b0b; flex-shrink: 0; overflow: hidden; }
-        .item-img img { width: 100%; height: 100%; object-fit: cover; }
-        .item-info { flex: 1; }
-        .item-info h4 { font-size: 1.1rem; margin-bottom: 3px; color: #fff; }
-        .item-info p { font-size: 0.8rem; color: #888; }
-        .item-price { text-align: left; color: #d4af37; font-weight: bold; font-size: 1.1rem; }
-        .section-header { text-align: right; padding: 15px 0 5px 0; font-size: 1.4rem; font-weight: bold; color: #ffcc00; border-bottom: 2px solid #ffcc00; margin: 20px 0 10px 0; display: flex; justify-content: space-between; }
-        .loading { text-align: center; padding: 20px; color: #aaa; }
-    </style>
-</head>
-<body>
-
-    <!-- صفحه ۱: لوگوی بزرگ در وسط -->
-    <div id="page-landing" class="page active">
-        <img src="logo.png.jpg" alt="لوگوی مغازه" class="landing-logo">
-        <h1 class="landing-title gold">آبمیوه سلامت</h1>
-        <p class="landing-sub">تازه‌ترین طعم‌ها در خدمت شما</p>
-        <button class="enter-btn" onclick="goToMenu()">مشاهده منوی محصولات</button>
-    </div>
-
-    <!-- صفحه ۲: صفحه اصلی منو -->
-    <div id="page-home" class="page">
-        <div class="header">
-            <img src="logo.png.jpg" alt="لوگوی مغازه" class="header-logo">
-            <h1 class="gold">آبمیوه سلامت</h1>
-            <p>تازه‌ترین طعم‌ها در خدمت شما</p>
-        </div>
-
-        <!-- دکمه‌های انتخاب سایز -->
-        <div class="size-selector" id="size-buttons">
-            <div class="size-btn active" id="btn-لیوانی" onclick="changeSize('لیوانی')">🥤 لیوانی</div>
-            <div class="size-btn" id="btn-نیم‌لیتری" onclick="changeSize('نیم‌لیتری')">🧃 نیم‌لیتری</div>
-            <div class="size-btn" id="btn-یک‌لیتری" onclick="changeSize('یک‌لیتری')">🍶 یک‌لیتری</div>
-            <div class="size-btn" id="btn-یک‌ونیم‌لیتری" onclick="changeSize('یک‌ونیم‌لیتری')">🫙 یک‌ونیم</div>
-        </div>
-
-        <div id="loading-msg" class="loading">در حال بارگذاری منو...</div>
-        <div id="menu-list-container" class="menu-list"></div>
-
-        <div class="info-row">
-    <div class="info-box">
-        <span>📍</span>
-        <p>یوسف‌آباد خیابان سید جمال‌الدین اسد آبادی بین کوچه ۴۸و۵۰ آبمیوه سلامت</p>
-    </div>
-    <div class="info-box">
-        <span>📞</span>
-        <p>۰۹۱۲۰۲۳۰۲۸۵</p>
-    </div>
-    <div class="info-box">
-        <span>🕐</span>
-        <p>ساعت کاری<br>۹ تا ۲۳</p>
-    </div>
+<html lang="fa" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>آبمیوه سلامت | منوی دیجیتال</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+body{font-family:Vazirmatn,sans-serif;background:#f6f7f3;margin:0;color:#222;max-width:540px;padding:16px;margin:auto}
+.hero{background:#fff;border-radius:22px;padding:20px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.hero img{width:110px;height:110px;border-radius:50%;border:4px solid #d4af37}
+h1{margin:10px 0;color:#1f6f50}.sub{color:#666}
+#search{width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;margin:18px 0}
+.size{display:flex;gap:8px;flex-wrap:wrap}.size button{flex:1;padding:10px;border:none;border-radius:20px;background:#fff}.active{background:#1f6f50!important;color:#fff}
+.card{display:flex;justify-content:space-between;align-items:center;background:#fff;margin:12px 0;padding:14px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.price{color:#1f6f50;font-weight:700}
+.sec{margin-top:20px;color:#1f6f50;font-weight:700}
+.footer{display:flex;justify-content:space-around;background:#fff;padding:16px;border-radius:18px;margin:24px 0}
+</style></head><body>
+<div class="hero"><img src="logo.png.jpg"><h1>آبمیوه سلامت</h1><div class="sub">تازه • طبیعی • خوشمزه</div></div>
+<input id="search" placeholder="🔍 جستجوی محصول">
+<div class="size">
+<button class="active" onclick="setSize('لیوانی',this)">🥤 لیوانی</button>
+<button onclick="setSize('نیم‌لیتری',this)">🧃 نیم لیتری</button>
+<button onclick="setSize('یک‌لیتری',this)">🍶 یک لیتری</button>
+<button onclick="setSize('یک‌ونیم‌لیتری',this)">🫙 ۱.۵ لیتری</button>
 </div>
-    
-
-    <script>
-        // لینک فایل CSV
-        const CSV_FILE_URL = "menu.csv";
-
-        let allData = [];
-        let currentSize = "لیوانی";
-
-        function goToMenu() {
-            document.getElementById('page-landing').classList.remove('active');
-            document.getElementById('page-home').classList.add('active');
-            loadMenu();
-        }
-
-        function loadMenu() {
-            document.getElementById('loading-msg').style.display = 'block';
-            Papa.parse(CSV_FILE_URL, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    allData = results.data.filter(row => row["نام محصول"] && row["نام محصول"].trim() !== "");
-                    document.getElementById('loading-msg').style.display = 'none';
-                    renderMenu();
-                },
-                error: function() {
-                    document.getElementById('loading-msg').innerHTML = "خطا در لود منو. فایل CSV پیدا نشد.";
-                }
-            });
-        }
-
-        function renderItem(item) {
-            if (item["نام محصول"] === "منو ویژه فصلی") return `<div class="section-header"><span>🍉 منو ویژه فصلی</span></div>`;
-            else if (item["نام محصول"] === "ترش‌های سلامت") return `<div class="section-header"><span>🥬 ترش‌های سلامت</span></div>`;
-            else if (item["نام محصول"] === "طبیعی‌های سلامت") return `<div class="section-header"><span>🥗 طبیعی‌های سلامت</span></div>`;
-            else if (item["نام محصول"] === "ترکیبی‌های سلامت") return `<div class="section-header"><span>🍓 ترکیبی‌های سلامت</span></div>`;
-            else if (item["نام محصول"] === "میلک شیک‌ها") return `<div class="section-header"><span>🥛 میلک شیک‌ها</span></div>`;
-            
-            let basePrice = parseInt(item[currentSize]);
-            if (isNaN(basePrice)) return "";
-
-            let finalPrice = basePrice;
-            if (currentSize === "نیم‌لیتری") finalPrice = basePrice;
-            else if (currentSize === "یک‌لیتری") finalPrice = basePrice * 2;
-            else if (currentSize === "یک‌ونیم‌لیتری") finalPrice = basePrice * 3;
-
-            // اگر قیمت 0 بود یعنی این سایز وجود نداره -> آیتم رو حذف کن
-            if (finalPrice === 0) return "";
-
-            return `
-                <div class="menu-item">
-                    <div class="item-img"><img src="logo.png.jpg" alt="لوگو"></div>
-                    <div class="item-info">
-                        <h4>${item["نام محصول"]}</h4>
-                        <p>${item["توضیحات"] || ""}</p>
-                    </div>
-                    <div class="item-price">${finalPrice}t</div>
-                </div>
-            `;
-        }
-
-        function renderMenu() {
-            const container = document.getElementById('menu-list-container');
-            const itemsHtml = allData.map(renderItem).filter(html => html !== "").join('');
-            container.innerHTML = itemsHtml;
-        }
-
-        function changeSize(sizeKey) {
-            currentSize = sizeKey;
-            document.querySelectorAll('.size-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.includes(sizeKey)) btn.classList.add('active');
-            });
-            renderMenu();
-        }
-
-        // وقتی صفحه لود شد، فقط لندینگ رو نشون بده
-        document.getElementById('page-home').classList.remove('active');
-        document.getElementById('page-landing').classList.add('active');
-    </script>
-</body>
-</html>
+<div id="menu"></div>
+<div class="footer"><div>📍 یوسف‌آباد</div><div><a href="tel:09120230285">📞 تماس</a></div><div>🕘 ۹ تا ۲۳</div></div>
+<script>
+let all=[],size='لیوانی';
+Papa.parse('menu.csv',{download:true,header:true,complete:r=>{all=r.data;draw();}});
+function setSize(s,b){size=s;document.querySelectorAll('.size button').forEach(x=>x.classList.remove('active'));b.classList.add('active');draw();}
+document.getElementById('search').oninput=draw;
+function draw(){
+ let q=document.getElementById('search').value.trim();
+ let h='';
+ all.forEach(i=>{
+ let n=i['نام محصول']; if(!n)return;
+ if(['منو ویژه فصلی','ترش‌های سلامت','طبیعی‌های سلامت','ترکیبی‌های سلامت','میلک شیک‌ها'].includes(n)){h+=`<div class='sec'>${n}</div>`;return;}
+ if(q && !n.includes(q))return;
+ let p=parseInt(i[size]); if(!p)return;
+ if(size==='یک‌لیتری')p*=2; if(size==='یک‌ونیم‌لیتری')p*=3;
+ h+=`<div class='card'><div><b>${n}</b><br><small>${i['توضیحات']||''}</small></div><div class='price'>${p.toLocaleString('fa-IR')} هزار تومان</div></div>`;
+ });
+ document.getElementById('menu').innerHTML=h;
+}
+</script></body></html>
