@@ -3,54 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منوی آبمیوه فروشی</title>
+    <title>طبیعت جویس | منوی دیجیتال</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0b0b0b; color: #f5f5f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; max-width: 500px; margin: auto; min-height: 100vh; }
+        body { background: #0b0b0b; color: #f5f5f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; max-width: 500px; margin: auto; min-height: 100vh; display: flex; flex-direction: column; }
         .gold { color: #d4af37; }
-        .page { display: none; }
-        .page.active { display: block; }
-        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #d4af37; margin-bottom: 20px; }
-        .header h1 { font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; }
-        .header p { color: #aaa; margin-top: 5px; font-size: 1.1rem; }
-        
-        .size-selector { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
-        .size-btn { flex: 1; background: #161616; border: 1px solid #333; color: #aaa; padding: 12px 0; border-radius: 30px; cursor: pointer; transition: 0.3s; text-align: center; font-weight: bold; }
+        .page { display: none; flex-direction: column; flex: 1; }
+        .page.active { display: flex; }
+
+        /* استایل صفحه ورود (لندینگ) */
+        #page-landing {
+            justify-content: center; align-items: center; text-align: center; height: 100vh;
+        }
+        .landing-logo {
+            width: 250px; height: 250px; border-radius: 50%; border: 4px solid #d4af37;
+            background-color: #fff; object-fit: cover; margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+        .landing-title { font-size: 2.5rem; margin-bottom: 10px; }
+        .landing-sub { color: #aaa; font-size: 1.1rem; margin-bottom: 40px; }
+        .enter-btn {
+            background: #d4af37; color: #000; border: none; padding: 15px 40px;
+            border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; width: 80%;
+        }
+        .enter-btn:active { transform: scale(0.95); }
+
+        /* استایل صفحه اصلی منو */
+        #page-home { padding-top: 20px; }
+        .header-logo {
+            width: 100px; height: 100px; border-radius: 50%; border: 2px solid #d4af37;
+            background-color: #fff; object-fit: cover; margin: 0 auto 15px auto; display: block;
+        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 2rem; font-weight: bold; letter-spacing: 2px; }
+        .header p { color: #aaa; margin-top: 5px; font-size: 1rem; }
+
+        /* دکمه‌های انتخاب سایز */
+        .size-selector { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .size-btn {
+            flex: 1; min-width: 70px; background: #161616; border: 1px solid #333; color: #aaa;
+            padding: 10px 0; border-radius: 30px; cursor: pointer; transition: 0.3s;
+            text-align: center; font-weight: bold;
+        }
         .size-btn.active { background: #d4af37; color: #000; border-color: #d4af37; }
         .size-btn:active { transform: scale(0.95); }
+        .size-btn.hidden { display: none; }
 
         .info-row { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
         .info-box { background: #161616; border-radius: 15px; padding: 15px; text-align: center; flex: 1; border: 1px solid #333; }
         .info-box span { color: #d4af37; font-size: 1.5rem; display: block; margin-bottom: 5px; }
         .info-box p { font-size: 0.8rem; color: #ccc; }
 
-        .menu-list { display: flex; flex-direction: column; gap: 15px; }
+        .menu-list { display: flex; flex-direction: column; gap: 15px; padding-bottom: 50px; }
         .menu-item { display: flex; align-items: center; background: #161616; border-radius: 20px; padding: 12px; border: 1px solid #333; }
-        .item-img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #d4af37; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; margin-left: 15px; background: #0b0b0b; flex-shrink: 0; }
+        .item-img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #d4af37; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; margin-left: 15px; background: #0b0b0b; flex-shrink: 0; overflow: hidden; }
+        .item-img img { width: 100%; height: 100%; object-fit: cover; }
         .item-info { flex: 1; }
         .item-info h4 { font-size: 1.1rem; margin-bottom: 3px; color: #fff; }
         .item-info p { font-size: 0.8rem; color: #888; }
         .item-price { text-align: left; color: #d4af37; font-weight: bold; font-size: 1.1rem; }
-        
         .section-header { text-align: right; padding: 15px 0 5px 0; font-size: 1.4rem; font-weight: bold; color: #ffcc00; border-bottom: 2px solid #ffcc00; margin: 20px 0 10px 0; display: flex; justify-content: space-between; }
         .loading { text-align: center; padding: 20px; color: #aaa; }
     </style>
 </head>
 <body>
-    <div id="page-home" class="page active">
+
+    <!-- صفحه ۱: لوگوی بزرگ در وسط -->
+    <div id="page-landing" class="page active">
+        <img src="logo.png.jpg" alt="لوگوی مغازه" class="landing-logo">
+        <h1 class="landing-title gold">طبیعت جویس</h1>
+        <p class="landing-sub">تازگی را بنوشید</p>
+        <button class="enter-btn" onclick="goToMenu()">مشاهده منوی محصولات</button>
+    </div>
+
+    <!-- صفحه ۲: صفحه اصلی منو -->
+    <div id="page-home" class="page">
         <div class="header">
-            <h1 class="gold">🍹 NATURE JUICE</h1>
+            <img src="logo.png.jpg" alt="لوگوی مغازه" class="header-logo">
+            <h1 class="gold">طبیعت جویس</h1>
             <p>تازگی را بنوشید</p>
         </div>
-        <div class="size-selector">
-            <div class="size-btn active" onclick="changeSize('لیوانی')">🥤 لیوانی</div>
-            <div class="size-btn" onclick="changeSize('نیم‌لیتری')">🧃 نیم‌لیتری</div>
-            <div class="size-btn" onclick="changeSize('یک‌لیتری')">🍶 یک‌لیتری</div>
-            <div class="size-btn" onclick="changeSize('یک‌ونیم‌لیتری')">🫙 یک‌ونیم</div>
+
+        <!-- دکمه‌های انتخاب سایز -->
+        <div class="size-selector" id="size-buttons">
+            <div class="size-btn active" id="btn-لیوانی" onclick="changeSize('لیوانی')">🥤 لیوانی</div>
+            <div class="size-btn" id="btn-نیم‌لیتری" onclick="changeSize('نیم‌لیتری')">🧃 نیم‌لیتری</div>
+            <div class="size-btn" id="btn-یک‌لیتری" onclick="changeSize('یک‌لیتری')">🍶 یک‌لیتری</div>
+            <div class="size-btn" id="btn-یک‌ونیم‌لیتری" onclick="changeSize('یک‌ونیم‌لیتری')">🫙 یک‌ونیم</div>
         </div>
+
         <div id="loading-msg" class="loading">در حال بارگذاری منو...</div>
         <div id="menu-list-container" class="menu-list"></div>
+
         <div class="info-row">
             <div class="info-box"><span>📍</span><p>آدرس ما</p></div>
             <div class="info-box"><span>📞</span><p>تماس با ما</p></div>
@@ -59,11 +105,17 @@
     </div>
 
     <script>
-        // ⭐️ مهمترین خط: اینجا داره فایل رو از کنار خودش می‌خونه
+        // لینک فایل CSV
         const CSV_FILE_URL = "menu.csv";
 
         let allData = [];
         let currentSize = "لیوانی";
+
+        function goToMenu() {
+            document.getElementById('page-landing').classList.remove('active');
+            document.getElementById('page-home').classList.add('active');
+            loadMenu();
+        }
 
         function loadMenu() {
             document.getElementById('loading-msg').style.display = 'block';
@@ -77,7 +129,7 @@
                     renderMenu();
                 },
                 error: function() {
-                    document.getElementById('loading-msg').innerHTML = "خطا در لود منو. فایل CSV کنار فایل HTML نیست.";
+                    document.getElementById('loading-msg').innerHTML = "خطا در لود منو. فایل CSV پیدا نشد.";
                 }
             });
         }
@@ -97,9 +149,12 @@
             else if (currentSize === "یک‌لیتری") finalPrice = basePrice * 2;
             else if (currentSize === "یک‌ونیم‌لیتری") finalPrice = basePrice * 3;
 
+            // اگر قیمت 0 بود یعنی این سایز وجود نداره -> آیتم رو حذف کن
+            if (finalPrice === 0) return "";
+
             return `
                 <div class="menu-item">
-                    <div class="item-img">🍎</div>
+                    <div class="item-img"><img src="logo.png.jpg" alt="لوگو"></div>
                     <div class="item-info">
                         <h4>${item["نام محصول"]}</h4>
                         <p>${item["توضیحات"] || ""}</p>
@@ -124,7 +179,9 @@
             renderMenu();
         }
 
-        loadMenu();
+        // وقتی صفحه لود شد، فقط لندینگ رو نشون بده
+        document.getElementById('page-home').classList.remove('active');
+        document.getElementById('page-landing').classList.add('active');
     </script>
 </body>
 </html>
