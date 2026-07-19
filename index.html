@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طبیعت جویس | منوی دیجیتال</title>
+    <title>آبمیوه سلامت | منوی دیجیتال</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -73,8 +73,8 @@
     <!-- صفحه ۱: لوگوی بزرگ در وسط -->
     <div id="page-landing" class="page active">
         <img src="logo.png.jpg" alt="لوگوی مغازه" class="landing-logo">
-        <h1 class="landing-title gold">طبیعت جویس</h1>
-        <p class="landing-sub">تازگی را بنوشید</p>
+        <h1 class="landing-title gold">آبمیوه سلامت</h1>
+        <p class="landing-sub">تازه‌ترین طعم‌ها در خدمت شما</p>
         <button class="enter-btn" onclick="goToMenu()">مشاهده منوی محصولات</button>
     </div>
 
@@ -82,8 +82,8 @@
     <div id="page-home" class="page">
         <div class="header">
             <img src="logo.png.jpg" alt="لوگوی مغازه" class="header-logo">
-            <h1 class="gold">طبیعت جویس</h1>
-            <p>تازگی را بنوشید</p>
+            <h1 class="gold">آبمیوه سلامت</h1>
+            <p>تازه‌ترین طعم‌ها در خدمت شما</p>
         </div>
 
         <!-- دکمه‌های انتخاب سایز -->
@@ -141,7 +141,7 @@
             else if (item["نام محصول"] === "ترکیبی‌های سلامت") return `<div class="section-header"><span>🍓 ترکیبی‌های سلامت</span></div>`;
             else if (item["نام محصول"] === "میلک شیک‌ها") return `<div class="section-header"><span>🥛 میلک شیک‌ها</span></div>`;
             
-            let basePrice = parseInt(item["قیمت لیوانی"]);
+            let basePrice = parseInt(item[currentSize]);
             if (isNaN(basePrice)) return "";
 
             let finalPrice = basePrice;
