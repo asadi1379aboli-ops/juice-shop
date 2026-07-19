@@ -59,7 +59,7 @@
     </div>
 
     <script>
-        // لینک فایل CSV که در گیت‌هاب ساختی
+        // فقط این لینک رو چک کن، باید دقیقاً همین باشه
         const CSV_FILE_URL = "https://raw.githubusercontent.com/asadi1379/juice-shop/main/menu.csv";
 
         let allData = [];
@@ -70,13 +70,16 @@
             Papa.parse(CSV_FILE_URL, {
                 download: true,
                 header: true,
+                skipEmptyLines: true, // این خط باعث میشه اگه خط خالی باشه، خراب نشه
                 complete: function(results) {
+                    // این قسمت فیلتر میکنه که فقط ردیف‌هایی که اسم دارن رو نشون بده
                     allData = results.data.filter(row => row["نام محصول"] && row["نام محصول"].trim() !== "");
                     document.getElementById('loading-msg').style.display = 'none';
                     renderMenu();
                 },
-                error: function() {
-                    document.getElementById('loading-msg').innerHTML = "خطا در لود منو.";
+                error: function(err) {
+                    document.getElementById('loading-msg').innerHTML = "خطا در لود منو. فایل CSV پیدا نشد یا لینک اشتباه است.";
+                    console.log(err);
                 }
             });
         }
