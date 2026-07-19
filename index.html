@@ -3,96 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منوی آبمیوه فروشی لوکس</title>
+    <title>منوی آبمیوه فروشی</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #0b0b0b;
-            color: #f5f5f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 15px;
-            max-width: 500px;
-            margin: auto;
-            min-height: 100vh;
-        }
+        body { background: #0b0b0b; color: #f5f5f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; max-width: 500px; margin: auto; min-height: 100vh; }
         .gold { color: #d4af37; }
-        .bg-gold { background: #d4af37; }
-        .border-gold { border-color: #d4af37; }
-        
         .page { display: none; }
         .page.active { display: block; }
-
         .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #d4af37; margin-bottom: 20px; }
         .header h1 { font-size: 2.5rem; font-weight: bold; letter-spacing: 2px; }
         .header p { color: #aaa; margin-top: 5px; font-size: 1.1rem; }
-
-        .size-btn {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #161616; border: 1px solid #d4af37;
-            padding: 18px 20px; border-radius: 30px;
-            margin-bottom: 15px; cursor: pointer; transition: 0.3s;
-            color: #fff; font-size: 1.2rem; font-weight: bold;
-        }
-        .size-btn:hover { background: #222; transform: scale(1.02); border-color: #f1c40f; }
-        .size-btn .icon { font-size: 1.8rem; color: #d4af37; }
+        
+        .size-selector { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+        .size-btn { flex: 1; background: #161616; border: 1px solid #333; color: #aaa; padding: 12px 0; border-radius: 30px; cursor: pointer; transition: 0.3s; text-align: center; font-weight: bold; }
+        .size-btn.active { background: #d4af37; color: #000; border-color: #d4af37; }
+        .size-btn:active { transform: scale(0.95); }
 
         .info-row { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
         .info-box { background: #161616; border-radius: 15px; padding: 15px; text-align: center; flex: 1; border: 1px solid #333; }
         .info-box span { color: #d4af37; font-size: 1.5rem; display: block; margin-bottom: 5px; }
         .info-box p { font-size: 0.8rem; color: #ccc; }
 
-        .inner-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 20px; }
-        .back-btn { background: none; border: none; color: #d4af37; font-size: 1.5rem; cursor: pointer; }
-        .cart-icon { color: #d4af37; font-size: 1.5rem; cursor: pointer; }
-
-        .category-title { text-align: center; font-size: 1.8rem; font-weight: bold; }
-        .category-slogan { text-align: center; color: #aaa; font-size: 0.9rem; margin: 5px 0 20px; font-style: italic; }
-
         .menu-list { display: flex; flex-direction: column; gap: 15px; }
-        .menu-item {
-            display: flex; align-items: center; background: #161616;
-            border-radius: 20px; padding: 12px; border: 1px solid #333;
-        }
-        .item-img {
-            width: 70px; height: 70px; border-radius: 50%;
-            border: 2px solid #d4af37; display: flex; justify-content: center;
-            align-items: center; font-size: 2.5rem; margin-left: 15px;
-            background: #0b0b0b; flex-shrink: 0;
-        }
+        .menu-item { display: flex; align-items: center; background: #161616; border-radius: 20px; padding: 12px; border: 1px solid #333; }
+        .item-img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #d4af37; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; margin-left: 15px; background: #0b0b0b; flex-shrink: 0; }
         .item-info { flex: 1; }
         .item-info h4 { font-size: 1.1rem; margin-bottom: 3px; color: #fff; }
         .item-info p { font-size: 0.8rem; color: #888; }
         .item-price { text-align: left; color: #d4af37; font-weight: bold; font-size: 1.1rem; }
-
-        .fat-burn-section { border: 1px solid #27ae60; background: #0d1f14; border-radius: 20px; padding: 15px; margin-bottom: 20px; }
-        .fat-burn-section .category-title { color: #27ae60; }
-        .fat-burn-section .item-img { border-color: #27ae60; }
+        
+        .section-header { text-align: right; padding: 15px 0 5px 0; font-size: 1.4rem; font-weight: bold; color: #ffcc00; border-bottom: 2px solid #ffcc00; margin: 20px 0 10px 0; display: flex; justify-content: space-between; }
+        .loading { text-align: center; padding: 20px; color: #aaa; }
     </style>
 </head>
 <body>
-
     <div id="page-home" class="page active">
         <div class="header">
             <h1 class="gold">🍹 NATURE JUICE</h1>
             <p>تازگی را بنوشید</p>
         </div>
-        <div class="size-btn" onclick="openMenu('لیوانی')">
-            <span>منوی لیوانی</span>
-            <span class="icon">🥤</span>
+        <div class="size-selector">
+            <div class="size-btn active" onclick="changeSize('لیوانی')">🥤 لیوانی</div>
+            <div class="size-btn" onclick="changeSize('نیم‌لیتری')">🧃 نیم‌لیتری</div>
+            <div class="size-btn" onclick="changeSize('یک‌لیتری')">🍶 یک‌لیتری</div>
+            <div class="size-btn" onclick="changeSize('یک‌ونیم‌لیتری')">🫙 یک‌ونیم</div>
         </div>
-        <div class="size-btn" onclick="openMenu('نیم‌لیتری')">
-            <span>منوی نیم‌لیتری</span>
-            <span class="icon">🧃</span>
-        </div>
-        <div class="size-btn" onclick="openMenu('یک‌لیتری')">
-            <span>منوی یک‌لیتری</span>
-            <span class="icon">🍶</span>
-        </div>
-        <div class="size-btn" onclick="openMenu('یک‌ونیم‌لیتری')">
-            <span>منوی یک‌ونیم‌لیتری</span>
-            <span class="icon">🫙</span>
-        </div>
-
+        <div id="loading-msg" class="loading">در حال بارگذاری منو...</div>
+        <div id="menu-list-container" class="menu-list"></div>
         <div class="info-row">
             <div class="info-box"><span>📍</span><p>آدرس ما</p></div>
             <div class="info-box"><span>📞</span><p>تماس با ما</p></div>
@@ -100,90 +58,72 @@
         </div>
     </div>
 
-    <div id="page-inner" class="page">
-        <div class="inner-header">
-            <button class="back-btn" onclick="closeMenu()">‹</button>
-            <span id="inner-title" class="category-title gold">عنوان منو</span>
-            <span class="cart-icon">🛒</span>
-        </div>
-        <p id="inner-slogan" class="category-slogan">شعار منو</p>
-
-        <div class="fat-burn-section">
-            <div class="category-title">🔥 چربی‌سوز (کرفس)</div>
-            <div id="fat-burn-list" class="menu-list" style="margin-top: 15px;"></div>
-        </div>
-
-        <div id="regular-list" class="menu-list"></div>
-    </div>
-
     <script>
-        const menuData = {
-            fatBurners: [
-                { name: "میکس کرفس & سیب", desc: "کرفس + سیب سبز + لیمو", price: "_ تومان" },
-                { name: "میکس کرفس & آناناس", desc: "کرفس + آناناس + نعناع", price: "_ تومان" },
-                { name: "الیت کرفس", desc: "کرفس خالص + چند قطره آب لیمو", price: "_ تومان" }
-            ],
-            sizes: {
-                "لیوانی": {
-                    slogan: "از دل طبیعت تا لیوان شما",
-                    items: [
-                        { name: "آب پرتقال طبیعی", desc: "پرتقال نوبر", price: "_ تومان" },
-                        { name: "آب هویج", desc: "هویج تازه + سیب", price: "_ تومان" }
-                    ]
+        // لینک فایل CSV که در گیت‌هاب ساختی
+        const CSV_FILE_URL = "https://raw.githubusercontent.com/asadi1379/juice-shop/main/menu.csv";
+
+        let allData = [];
+        let currentSize = "لیوانی";
+
+        function loadMenu() {
+            document.getElementById('loading-msg').style.display = 'block';
+            Papa.parse(CSV_FILE_URL, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    allData = results.data.filter(row => row["نام محصول"] && row["نام محصول"].trim() !== "");
+                    document.getElementById('loading-msg').style.display = 'none';
+                    renderMenu();
                 },
-                "نیم‌لیتری": {
-                    slogan: "لذت طعم واقعی میوه‌ها",
-                    items: [
-                        { name: "اسموتی توت‌فرنگی", desc: "توت‌فرنگی + ماست + عسل", price: "_ تومان" },
-                        { name: "آب هندوانه", desc: "هندوانه + نعناع", price: "_ تومان" }
-                    ]
-                },
-                "یک‌لیتری": {
-                    slogan: "کیفیتی که میتوان نوشی",
-                    items: [
-                        { name: "میکس استوایی", desc: "آناناس + انبه + پرتقال", price: "_ تومان" },
-                        { name: "میکس سبز", desc: "اسفناج + کرفس + سیب", price: "_ تومان" }
-                    ]
-                },
-                "یک‌ونیم‌لیتری": {
-                    slogan: "تازگی امضای ماست",
-                    items: [
-                        { name: "مگا میوه", desc: "انبه + طالبی + توت‌فرنگی", price: "_ تومان" },
-                        { name: "سلطان مرکبات", desc: "پرتقال + گریپ‌فروت + لیمو", price: "_ تومان" }
-                    ]
+                error: function() {
+                    document.getElementById('loading-msg').innerHTML = "خطا در لود منو.";
                 }
-            }
-        };
+            });
+        }
 
         function renderItem(item) {
+            if (item["نام محصول"] === "منو ویژه فصلی") return `<div class="section-header"><span>🍉 منو ویژه فصلی</span></div>`;
+            else if (item["نام محصول"] === "ترش‌های سلامت") return `<div class="section-header"><span>🥬 ترش‌های سلامت</span></div>`;
+            else if (item["نام محصول"] === "طبیعی‌های سلامت") return `<div class="section-header"><span>🥗 طبیعی‌های سلامت</span></div>`;
+            else if (item["نام محصول"] === "ترکیبی‌های سلامت") return `<div class="section-header"><span>🍓 ترکیبی‌های سلامت</span></div>`;
+            else if (item["نام محصول"] === "میلک شیک‌ها") return `<div class="section-header"><span>🥛 میلک شیک‌ها</span></div>`;
+            
+            let basePrice = parseInt(item["قیمت لیوانی"]);
+            if (isNaN(basePrice)) return "";
+
+            let finalPrice = basePrice;
+            if (currentSize === "نیم‌لیتری") finalPrice = basePrice;
+            else if (currentSize === "یک‌لیتری") finalPrice = basePrice * 2;
+            else if (currentSize === "یک‌ونیم‌لیتری") finalPrice = basePrice * 3;
+
             return `
                 <div class="menu-item">
                     <div class="item-img">🍎</div>
                     <div class="item-info">
-                        <h4>${item.name}</h4>
-                        <p>${item.desc}</p>
+                        <h4>${item["نام محصول"]}</h4>
+                        <p>${item["توضیحات"] || ""}</p>
                     </div>
-                    <div class="item-price">${item.price}</div>
+                    <div class="item-price">${finalPrice}t</div>
                 </div>
             `;
         }
 
-        function openMenu(sizeKey) {
-            document.getElementById('page-home').classList.remove('active');
-            document.getElementById('page-inner').classList.add('active');
-
-            const sizeData = menuData.sizes[sizeKey];
-            document.getElementById('inner-title').textContent = `منوی ${sizeKey}`;
-            document.getElementById('inner-slogan').textContent = sizeData.slogan;
-
-            document.getElementById('fat-burn-list').innerHTML = menuData.fatBurners.map(renderItem).join('');
-            document.getElementById('regular-list').innerHTML = sizeData.items.map(renderItem).join('');
+        function renderMenu() {
+            const container = document.getElementById('menu-list-container');
+            const itemsHtml = allData.map(renderItem).filter(html => html !== "").join('');
+            container.innerHTML = itemsHtml;
         }
 
-        function closeMenu() {
-            document.getElementById('page-home').classList.add('active');
-            document.getElementById('page-inner').classList.remove('active');
+        function changeSize(sizeKey) {
+            currentSize = sizeKey;
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.includes(sizeKey)) btn.classList.add('active');
+            });
+            renderMenu();
         }
+
+        loadMenu();
     </script>
 </body>
 </html>
